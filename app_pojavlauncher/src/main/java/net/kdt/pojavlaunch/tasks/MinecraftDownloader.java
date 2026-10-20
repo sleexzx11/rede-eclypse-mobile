@@ -516,9 +516,9 @@ public class MinecraftDownloader {
         }
         
         private void downloadFile() throws Exception {
-            if(isLocalProfile){
-                throw new RuntimeException("Download failed. Please make sure you are logged in with a Microsoft Account.");
-            }
+            // if(isLocalProfile){ // Rede Eclypse: permite contas offline
+            //     throw new RuntimeException("Download failed. Please make sure you are logged in with a Microsoft Account.");
+            // }
 
             try {
                 DownloadUtils.ensureSha1(mTargetPath, mTargetSha1, () -> {
