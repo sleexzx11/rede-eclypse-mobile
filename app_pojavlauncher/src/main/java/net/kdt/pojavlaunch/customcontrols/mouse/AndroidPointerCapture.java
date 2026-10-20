@@ -112,6 +112,7 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
     }
 
     private void checkSameDevice(InputDevice inputDevice) {
+        if(inputDevice == null) return;
         int newIdentifier = inputDevice.getId();
         if(mInputDeviceIdentifier != newIdentifier) {
             reinitializeDeviceSpecificProperties(inputDevice);
@@ -121,6 +122,8 @@ public class AndroidPointerCapture implements ViewTreeObserver.OnWindowFocusChan
 
     private void reinitializeDeviceSpecificProperties(InputDevice inputDevice) {
         mPointerTracker.cancelTracking();
+        if(inputDevice == null) { mDeviceSupportsRelativeAxis = false; return; }
+
         boolean relativeXSupported = inputDevice.getMotionRange(MotionEvent.AXIS_RELATIVE_X) != null;
         boolean relativeYSupported = inputDevice.getMotionRange(MotionEvent.AXIS_RELATIVE_Y) != null;
         mDeviceSupportsRelativeAxis = relativeXSupported && relativeYSupported;
