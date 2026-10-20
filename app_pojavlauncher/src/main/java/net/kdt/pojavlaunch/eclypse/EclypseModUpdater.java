@@ -1,4 +1,4 @@
-﻿package net.kdt.pojavlaunch.eclypse;
+package net.kdt.pojavlaunch.eclypse;
 
 import android.app.Activity;
 import android.os.Handler;

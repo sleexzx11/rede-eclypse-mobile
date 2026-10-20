@@ -1,4 +1,4 @@
-﻿package net.kdt.pojavlaunch.fragments;
+package net.kdt.pojavlaunch.fragments;
 
 import static net.kdt.pojavlaunch.Tools.openPath;
 import static net.kdt.pojavlaunch.Tools.shareLog;

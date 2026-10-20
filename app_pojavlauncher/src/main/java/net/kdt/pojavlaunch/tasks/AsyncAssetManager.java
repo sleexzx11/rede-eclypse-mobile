@@ -1,4 +1,4 @@
-﻿package net.kdt.pojavlaunch.tasks;
+package net.kdt.pojavlaunch.tasks;
 
 
 import static net.kdt.pojavlaunch.Architecture.archAsString;
