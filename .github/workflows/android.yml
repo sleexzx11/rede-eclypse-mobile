@@ -29,9 +29,20 @@ jobs:
 
       - name: Get LTW
         run: |
-          sudo apt-get update && sudo apt-get install -y wget
+          sudo apt-get update && sudo apt-get install -y wget unzip
           mkdir -p app_pojavlauncher/libs
           wget -q -O app_pojavlauncher/libs/ltw-release.aar https://github.com/PojavLauncherTeam/LTW/releases/latest/download/ltw-release.aar
+
+      - name: Extract Official JRE Runtimes (Java 17, 21, 8)
+        run: |
+          echo "Baixando e extraindo os runtimes oficiais do Java (17, 21, 8)..."
+          wget -q -O /tmp/pojav.apk https://github.com/PojavLauncherTeam/PojavLauncher/releases/download/gladiolus/PojavLauncher.apk
+          mkdir -p /tmp/pojav_extracted
+          unzip -q /tmp/pojav.apk "assets/components/*" -d /tmp/pojav_extracted/
+          mkdir -p app_pojavlauncher/src/main/assets/components
+          cp -r /tmp/pojav_extracted/assets/components/jre* app_pojavlauncher/src/main/assets/components/
+          rm -rf /tmp/pojav.apk /tmp/pojav_extracted
+          echo "Runtimes do Java embutidos com sucesso!"
 
       - uses: gradle/actions/setup-gradle@v4
         with:
@@ -71,6 +82,7 @@ jobs:
           body: |
             ### 📱 Launcher Mobile Oficial da Rede Eclypse
             - **Minecraft 1.20.1** com **Forge 47.4.10**
+            - **Java 17 e Java 21 integrados** (compatível com ARM64, ARM32 e x86_64 para emuladores)
             - **Servidor:** `sp-02.magnohost.com.br:25518` (já embutido na lista de servidores)
             - **Auto-Update:** Sincronização automática de mods via GitHub no botão Jogar.
           files: |
