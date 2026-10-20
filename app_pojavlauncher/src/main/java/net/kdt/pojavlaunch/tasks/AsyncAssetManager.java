@@ -68,6 +68,7 @@ public class AsyncAssetManager {
 
                 Tools.copyAssetFile(ctx, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
                 Tools.copyAssetFile(ctx, "servers.dat", Tools.DIR_GAME_NEW, false);
+                Tools.copyAssetFile(ctx, "1.20.1-forge-47.4.10.json", Tools.DIR_GAME_NEW + "/versions/1.20.1-forge-47.4.10", "1.20.1-forge-47.4.10.json", false);
                 Tools.copyAssetFile(ctx,"resolv.conf",Tools.DIR_DATA, false);
             } catch (IOException e) {
                 Log.e("AsyncAssetManager", "Failed to unpack critical components !");

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,9 +24,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,19 +32,23 @@ public class EclypseModUpdater {
     private static final String TAG = "EclypseModUpdater";
     public static final String DISTRO_URL =
             "https://raw.githubusercontent.com/sleexzx11/Launcher/main/rede-eclypse-distro/distribution.json";
+    public static final String FORGE_VERSION_URL =
+            "https://raw.githubusercontent.com/sleexzx11/Launcher/main/rede-eclypse-distro/versions/1.20.1-forge-47.4.10/1.20.1-forge-47.4.10.json";
 
     private static final ExecutorService sExecutor = Executors.newSingleThreadExecutor();
     private static final Handler sHandler = new Handler(Looper.getMainLooper());
 
-    private static class ModItem {
+    private static class SyncItem {
         String name;
         String url;
         long size;
+        File destination;
 
-        ModItem(String name, String url, long size) {
+        SyncItem(String name, String url, long size, File destination) {
             this.name = name;
             this.url = url;
             this.size = size;
+            this.destination = destination;
         }
     }
 
@@ -57,7 +58,6 @@ public class EclypseModUpdater {
             return;
         }
 
-        // Cria o diálogo de progresso
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Rede Eclypse");
         builder.setCancelable(false);
@@ -66,7 +66,7 @@ public class EclypseModUpdater {
         TextView statusText = dialogView.findViewById(R.id.eclypse_status_text);
         ProgressBar progressBar = dialogView.findViewById(R.id.eclypse_progress_bar);
         progressBar.setIndeterminate(true);
-        statusText.setText("Verificando atualizações do modpack...");
+        statusText.setText("Verificando arquivos da Rede Eclypse...");
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
@@ -77,7 +77,7 @@ public class EclypseModUpdater {
             try {
                 success = performSync(activity, statusText, progressBar);
             } catch (Exception e) {
-                Log.e(TAG, "Falha na sincronização com GitHub: " + e.getMessage(), e);
+                Log.e(TAG, "Falha na sincronização: " + e.getMessage(), e);
             }
 
             final boolean synced = success;
@@ -87,7 +87,7 @@ public class EclypseModUpdater {
                 } catch (Exception ignored) {}
 
                 if (!synced) {
-                    Toast.makeText(activity, "Iniciando com os mods locais...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Iniciando com os arquivos locais...", Toast.LENGTH_SHORT).show();
                 }
 
                 if (onComplete != null) {
@@ -98,21 +98,36 @@ public class EclypseModUpdater {
     }
 
     private static boolean performSync(Activity activity, TextView statusText, ProgressBar progressBar) {
+        File versionsDir = new File(Tools.DIR_GAME_NEW, "versions/1.20.1-forge-47.4.10");
+        File versionJson = new File(versionsDir, "1.20.1-forge-47.4.10.json");
         File modsDir = new File(Tools.DIR_GAME_NEW, "mods");
-        if (!modsDir.exists()) {
-            modsDir.mkdirs();
+        File libsDir = new File(Tools.DIR_GAME_NEW, "libraries");
+
+        if (!versionsDir.exists()) versionsDir.mkdirs();
+        if (!modsDir.exists()) modsDir.mkdirs();
+        if (!libsDir.exists()) libsDir.mkdirs();
+
+        // 1. Garante que o JSON da versao do Forge 1.20.1 existe
+        if (!versionJson.exists() || versionJson.length() == 0) {
+            updateProgress(statusText, progressBar, "Configurando Forge 1.20.1...", 0, 1);
+            try {
+                downloadFile(FORGE_VERSION_URL, versionJson);
+                Log.i(TAG, "Manifesto 1.20.1-forge-47.4.10.json baixado com sucesso!");
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao baixar manifesto da versao do Forge: " + e.getMessage());
+            }
         }
 
+        // 2. Consulta o manifesto remoto de mods e bibliotecas
         String jsonContent;
         try {
             jsonContent = fetchUrl(DISTRO_URL, 6000);
         } catch (Exception e) {
-            Log.w(TAG, "Offline ou sem conexão com GitHub: " + e.getMessage());
+            Log.w(TAG, "Offline ou sem conexão: " + e.getMessage());
             return false;
         }
 
-        List<ModItem> requiredMods = new ArrayList<>();
-        Set<String> validModNames = new HashSet<>();
+        List<SyncItem> pendingDownloads = new ArrayList<>();
 
         try {
             JSONObject root = new JSONObject(jsonContent);
@@ -125,17 +140,26 @@ public class EclypseModUpdater {
                         JSONObject mod = modules.getJSONObject(i);
                         String type = mod.optString("type", "");
                         JSONObject artifact = mod.optJSONObject("artifact");
-                        if (artifact != null) {
-                            String url = artifact.optString("url", "");
-                            long size = artifact.optLong("size", 0);
-                            String rawName = mod.optString("name", "");
+                        if (artifact == null) continue;
 
-                            // Identifica se é mod da pasta instance/mods
-                            if (url.contains("/instance/mods/") || "ForgeMod".equalsIgnoreCase(type) || rawName.endsWith(".jar")) {
-                                String fileName = rawName.endsWith(".jar") ? rawName : extractFileName(url);
-                                if (fileName != null && fileName.endsWith(".jar")) {
-                                    requiredMods.add(new ModItem(fileName, url, size));
-                                    validModNames.add(fileName.toLowerCase());
+                        String url = artifact.optString("url", "");
+                        long size = artifact.optLong("size", 0);
+                        String rawName = mod.optString("name", "");
+
+                        if ("ForgeMod".equalsIgnoreCase(type) || url.contains("/instance/mods/") || rawName.endsWith(".jar")) {
+                            String fileName = rawName.endsWith(".jar") ? rawName : extractFileName(url);
+                            if (fileName != null && fileName.endsWith(".jar")) {
+                                File target = new File(modsDir, fileName);
+                                if (!target.exists() || (size > 0 && target.length() != size)) {
+                                    pendingDownloads.add(new SyncItem(fileName, url, size, target));
+                                }
+                            }
+                        } else if ("Library".equalsIgnoreCase(type)) {
+                            String relPath = artifact.optString("path", "");
+                            if (!relPath.isEmpty()) {
+                                File target = new File(libsDir, relPath);
+                                if (!target.exists() || (size > 0 && target.length() != size)) {
+                                    pendingDownloads.add(new SyncItem(target.getName(), url, size, target));
                                 }
                             }
                         }
@@ -147,34 +171,23 @@ public class EclypseModUpdater {
             return false;
         }
 
-        if (requiredMods.isEmpty()) {
-            Log.w(TAG, "Nenhum mod listado no distribution.json.");
-            return true;
-        }
-
-        int total = requiredMods.size();
+        int total = pendingDownloads.size();
         for (int i = 0; i < total; i++) {
-            ModItem mod = requiredMods.get(i);
-            File localFile = new File(modsDir, mod.name);
+            SyncItem item = pendingDownloads.get(i);
+            int index = i + 1;
+            updateProgress(statusText, progressBar, "Baixando: " + item.name + " (" + index + "/" + total + ")", index, total);
 
-            // Verifica se precisa baixar
-            boolean needsDownload = !localFile.exists() || (mod.size > 0 && localFile.length() != mod.size);
-
-            if (needsDownload) {
-                int index = i + 1;
-                updateProgress(statusText, progressBar, "Baixando: " + mod.name + " (" + index + "/" + total + ")", index, total);
-
-                File tempFile = new File(modsDir, mod.name + ".part");
-                try {
-                    downloadFile(mod.url, tempFile);
-                    if (localFile.exists()) {
-                        localFile.delete();
-                    }
-                    tempFile.renameTo(localFile);
-                } catch (Exception e) {
-                    Log.e(TAG, "Erro ao baixar mod " + mod.name + ": " + e.getMessage());
-                    if (tempFile.exists()) tempFile.delete();
+            File tempFile = new File(item.destination.getParentFile(), item.destination.getName() + ".part");
+            try {
+                item.destination.getParentFile().mkdirs();
+                downloadFile(item.url, tempFile);
+                if (item.destination.exists()) {
+                    item.destination.delete();
                 }
+                tempFile.renameTo(item.destination);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao baixar " + item.name + ": " + e.getMessage());
+                if (tempFile.exists()) tempFile.delete();
             }
         }
 
