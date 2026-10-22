@@ -81,10 +81,10 @@ public class MainMenuFragment extends Fragment {
         View mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
         if (mDiscordButton != null) {
-            mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.discord_invite)));
+            mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), "https://discord.gg/B7T3ac2hgr"));
         }
         if (mShopButton != null) {
-            mShopButton.setOnClickListener(v -> Tools.openURL(requireActivity(), "https://sp-02.magnohost.com.br"));
+            mShopButton.setOnClickListener(v -> Tools.openURL(requireActivity(), "https://redeeclypse.minecart.com.br/"));
         }
         if (mCustomControlButton != null) {
             mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
