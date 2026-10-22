@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -154,7 +155,15 @@ public class EclypseAppUpdater {
         sExecutor.execute(() -> {
             File cacheDir = activity.getExternalCacheDir();
             if (cacheDir == null) cacheDir = activity.getCacheDir();
-            File apkFile = new File(cacheDir, "Rede-Eclypse-Update.apk");
+            
+            // Limpa APKs anteriores do cache para evitar conflitos de sessao do Android
+            File[] oldApks = cacheDir.listFiles((dir, name) -> name.startsWith("Rede-Eclypse-Update") && name.endsWith(".apk"));
+            if (oldApks != null) {
+                for (File f : oldApks) {
+                    try { f.delete(); } catch (Exception ignored) {}
+                }
+            }
+            File apkFile = new File(cacheDir, "Rede-Eclypse-Update-" + System.currentTimeMillis() + ".apk");
 
             boolean success = false;
             try {
@@ -238,6 +247,16 @@ public class EclypseAppUpdater {
 
     private static void launchPackageInstaller(Activity activity, File apkFile) {
         try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!activity.getPackageManager().canRequestPackageInstalls()) {
+                    Toast.makeText(activity, "Por favor, autorize a permissão 'Instalar apps desconhecidos' para atualizar.", Toast.LENGTH_LONG).show();
+                    Intent permIntent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                            .setData(Uri.parse("package:" + activity.getPackageName()));
+                    activity.startActivity(permIntent);
+                    return;
+                }
+            }
+
             Uri apkUri = FileProvider.getUriForFile(
                     activity,
                     activity.getPackageName() + ".fileprovider",
