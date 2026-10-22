@@ -60,11 +60,29 @@ public class EclypseAppUpdater {
                 String apkUrl = obj.optString("apkUrl", "");
 
                 long localVersionCode = getLocalVersionCode(activity);
+                String localVersionName = getLocalVersionName(activity);
 
-                Log.i(TAG, "Local VersionCode: " + localVersionCode + " | Remote: " + remoteVersionCode);
+                Log.i(TAG, "Local: Code=" + localVersionCode + " Name=" + localVersionName + " | Remote: Code=" + remoteVersionCode + " Name=" + remoteVersionName);
 
-                if (remoteVersionCode > localVersionCode && !apkUrl.isEmpty()) {
-                    sMainHandler.post(() -> showUpdateDialog(activity, title, remoteVersionName, changelog, apkUrl));
+                boolean hasUpdate = false;
+                if (!apkUrl.isEmpty()) {
+                    if (remoteVersionCode > localVersionCode) {
+                        hasUpdate = true;
+                    } else if (remoteVersionCode < 1000000 && localVersionCode > 9000000) {
+                        // Fallback quando o JSON usa versao incremental simples (ex: 2, 3...)
+                        // Dispara update se a versao instalada nao contiver o versionName novo
+                        if (!localVersionName.contains(remoteVersionName)) {
+                            hasUpdate = true;
+                        }
+                    }
+                }
+
+                if (hasUpdate) {
+                    final String fTitle = title;
+                    final String fVer = remoteVersionName;
+                    final String fLog = changelog;
+                    final String fUrl = apkUrl;
+                    sMainHandler.post(() -> showUpdateDialog(activity, fTitle, fVer, fLog, fUrl));
                 } else if (userTriggered) {
                     showToast(activity, "Você já está na versão mais recente da Rede Eclypse!");
                 }
@@ -75,6 +93,15 @@ public class EclypseAppUpdater {
                 }
             }
         });
+    }
+
+    private static String getLocalVersionName(Activity activity) {
+        try {
+            PackageInfo pInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
+            return pInfo.versionName != null ? pInfo.versionName : "";
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     private static long getLocalVersionCode(Activity activity) {
