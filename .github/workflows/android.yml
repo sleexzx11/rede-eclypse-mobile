@@ -89,3 +89,10 @@ jobs:
             out/Rede-Eclypse-Mobile.md5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Synchronized Update Manifest
+        if: github.ref == 'refs/heads/main'
+        run: |
+          node ./scripts/publish-update-manifest.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

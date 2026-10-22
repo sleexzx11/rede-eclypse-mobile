@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 public class EclypseAppUpdater {
     private static final String TAG = "EclypseAppUpdater";
     public static final String UPDATE_CONFIG_URL =
-            "https://raw.githubusercontent.com/sleexzx11/Launcher/main/rede-eclypse-distro/mobile-update.json";
+            "https://raw.githubusercontent.com/sleexzx11/rede-eclypse-mobile/main/mobile-update.json";
 
     private static final ExecutorService sExecutor = Executors.newSingleThreadExecutor();
     private static final Handler sMainHandler = new Handler(Looper.getMainLooper());
@@ -281,6 +281,18 @@ public class EclypseAppUpdater {
         conn.setConnectTimeout(timeoutMs);
         conn.setReadTimeout(timeoutMs);
         conn.setRequestProperty("User-Agent", "RedeEclypseMobile");
+        conn.setInstanceFollowRedirects(true);
+
+        int status = conn.getResponseCode();
+        if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM
+                || status == 307 || status == 308) {
+            String newUrl = conn.getHeaderField("Location");
+            conn.disconnect();
+            conn = (HttpURLConnection) new URL(newUrl).openConnection();
+            conn.setConnectTimeout(timeoutMs);
+            conn.setReadTimeout(timeoutMs);
+            conn.setRequestProperty("User-Agent", "RedeEclypseMobile");
+        }
 
         try (InputStream is = new BufferedInputStream(conn.getInputStream())) {
             java.util.Scanner s = new java.util.Scanner(is, "UTF-8").useDelimiter("\\A");
