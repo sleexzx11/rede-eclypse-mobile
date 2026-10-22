@@ -349,8 +349,16 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     private void runCraft(String versionId, JMinecraftVersionList.Version version) throws Throwable {
-        if(Tools.LOCAL_RENDERER == null) {
-            Tools.LOCAL_RENDERER = LauncherPreferences.PREF_RENDERER;
+        // Minecraft 1.20.1 Forge exige OpenGL 3.2+; Holy GL4ES (opengles2) quebra com GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT.
+        if(Tools.LOCAL_RENDERER == null || "opengles2".equals(Tools.LOCAL_RENDERER) || "opengles2_5".equals(Tools.LOCAL_RENDERER)) {
+            Tools.RenderersList rList = Tools.getCompatibleRenderers(this);
+            if (rList.rendererIds.contains("opengles3_ltw")) {
+                Tools.LOCAL_RENDERER = "opengles3_ltw";
+            } else if (rList.rendererIds.contains("vulkan_zink")) {
+                Tools.LOCAL_RENDERER = "vulkan_zink";
+            } else {
+                Tools.LOCAL_RENDERER = LauncherPreferences.PREF_RENDERER;
+            }
         }
         if(!Tools.checkRendererCompatible(this, Tools.LOCAL_RENDERER)) {
             Tools.RenderersList renderersList = Tools.getCompatibleRenderers(this);
