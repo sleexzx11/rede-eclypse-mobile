@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 public class EclypseModUpdater {
     private static final String TAG = "EclypseModUpdater";
     public static final String DISTRO_URL =
-            "https://raw.githubusercontent.com/sleexzx11/Launcher/main/rede-eclypse-distro/distribution.json";
+            "https://raw.githubusercontent.com/sleexzx11/Launcher/main/rede-eclypse-distro/mobile-distribution.json";
     public static final String FORGE_VERSION_URL =
             "https://raw.githubusercontent.com/sleexzx11/Launcher/main/rede-eclypse-distro/versions/1.20.1-forge-47.4.10/1.20.1-forge-47.4.10.json";
 
@@ -243,6 +243,7 @@ public class EclypseModUpdater {
                 boolean isMod = path.startsWith("mods/")
                         || "ForgeMod".equalsIgnoreCase(type)
                         || url.contains("/instance/mods/")
+                        || url.contains("/instance-mobile/mods/")
                         || (!path.contains("/") && name.endsWith(".jar"));
 
                 if (isMod) {
