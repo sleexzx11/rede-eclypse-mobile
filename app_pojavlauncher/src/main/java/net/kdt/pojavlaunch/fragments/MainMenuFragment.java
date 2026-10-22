@@ -73,12 +73,12 @@ public class MainMenuFragment extends Fragment {
             playerCard.setOnClickListener(v -> showAccountSwitcherDialog());
         }
 
-        // Dock de atalhos
-        ImageButton mDiscordButton = view.findViewById(R.id.discord_button);
-        ImageButton mShopButton = view.findViewById(R.id.shop_button);
-        ImageButton mCustomControlButton = view.findViewById(R.id.custom_control_button);
-        ImageButton mDockSettingsBtn = view.findViewById(R.id.dock_settings_btn);
-        ImageButton mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
+        // Dock de atalhos (usando View para seguranca total contra ClassCastException)
+        View mDiscordButton = view.findViewById(R.id.discord_button);
+        View mShopButton = view.findViewById(R.id.shop_button);
+        View mCustomControlButton = view.findViewById(R.id.custom_control_button);
+        View mDockSettingsBtn = view.findViewById(R.id.dock_settings_btn);
+        View mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
 
         if (mDiscordButton != null) {
             mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.discord_invite)));
@@ -106,7 +106,7 @@ public class MainMenuFragment extends Fragment {
         }
 
         // Botao Jogar
-        Button mPlayButton = view.findViewById(R.id.play_button);
+        View mPlayButton = view.findViewById(R.id.play_button);
         if (mPlayButton != null) {
             mPlayButton.setOnClickListener(v -> {
                 EclypseModUpdater.syncAndLaunch(requireActivity(), () -> {
@@ -117,10 +117,10 @@ public class MainMenuFragment extends Fragment {
 
         // Elementos de compatibilidade
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
-        Button mNewsButton = view.findViewById(R.id.news_button);
-        Button mInstallJarButton = view.findViewById(R.id.install_jar_button);
-        Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
-        ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
+        View mNewsButton = view.findViewById(R.id.news_button);
+        View mInstallJarButton = view.findViewById(R.id.install_jar_button);
+        View mShareLogsButton = view.findViewById(R.id.share_logs_button);
+        View mEditProfileButton = view.findViewById(R.id.edit_profile_button);
 
         if (mNewsButton != null) {
             mNewsButton.setOnClickListener(v -> Tools.openURL(requireActivity(), Tools.URL_HOME));
