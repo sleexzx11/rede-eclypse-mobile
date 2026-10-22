@@ -27,6 +27,7 @@ import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.PojavProfile;
 import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.eclypse.EclypseAppUpdater;
 import net.kdt.pojavlaunch.eclypse.EclypseModUpdater;
 import net.kdt.pojavlaunch.eclypse.EclypseServerPinger;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
@@ -93,6 +94,10 @@ public class MainMenuFragment extends Fragment {
             mDockSettingsBtn.setOnClickListener(v -> {
                 Tools.swapFragment(requireActivity(), LauncherPreferenceFragment.class, LauncherActivity.SETTING_FRAGMENT_TAG, null);
             });
+            mDockSettingsBtn.setOnLongClickListener(v -> {
+                EclypseAppUpdater.checkForUpdates(requireActivity(), true);
+                return true;
+            });
         }
         if (mOpenDirectoryButton != null) {
             mOpenDirectoryButton.setOnClickListener(v -> {
@@ -138,6 +143,9 @@ public class MainMenuFragment extends Fragment {
         // Atualiza os dados visuais do jogador e do servidor
         updatePlayerCard();
         refreshServerStatus();
+
+        // Checagem silenciosa de atualizacao do aplicativo (Opcao 3)
+        EclypseAppUpdater.checkForUpdates(requireActivity(), false);
     }
 
     private void updatePlayerCard() {
