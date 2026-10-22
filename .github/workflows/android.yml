@@ -29,9 +29,8 @@ jobs:
 
       - name: Get LTW
         run: |
-          sudo apt-get update && sudo apt-get install -y wget unzip
           mkdir -p app_pojavlauncher/libs
-          wget -q -O app_pojavlauncher/libs/ltw-release.aar https://github.com/PojavLauncherTeam/LTW/releases/latest/download/ltw-release.aar
+          wget -q -O app_pojavlauncher/libs/ltw-release.aar https://github.com/PojavLauncherTeam/LTW/releases/download/7703f1c/ltw-release.aar || wget -q -O app_pojavlauncher/libs/ltw-release.aar https://github.com/PojavLauncherTeam/LTW/releases/download/Rel/ltw-release.aar
 
       - name: Extract Official JRE Runtimes (Java 17, 21, 8)
         run: |
