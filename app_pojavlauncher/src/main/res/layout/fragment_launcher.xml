@@ -1,142 +1,303 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/fragment_menu_main"
-	android:gravity="top"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:background="@color/background_app"
-	>
-	<ScrollView
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/mc_version_spinner">
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-			<androidx.constraintlayout.widget.Guideline
-				android:id="@+id/center_guideline"
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				android:orientation="vertical"
-				app:layout_constraintGuide_percent="0.5"/>
-			<com.kdt.mcgui.LauncherMenuButton
-				android:id="@+id/news_button"
-				style="@style/LauncherMenuButton.Universal"
-				android:layout_width="0dp"
-				android:text="@string/mcl_tab_wiki"
-				android:drawableStart="@drawable/ic_menu_news"
-				app:layout_constraintTop_toTopOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintEnd_toStartOf="@id/social_divider" />
-			<View
-				android:id="@+id/social_divider"
-				style="@style/LauncherFragment_Divider"
-				android:layout_marginVertical="@dimen/padding_large"
-				app:layout_constraintTop_toTopOf="parent"
-				app:layout_constraintStart_toStartOf="@id/center_guideline"
-				app:layout_constraintEnd_toEndOf="@id/center_guideline"
-				app:layout_constraintBottom_toBottomOf="@id/news_button"/>
-			<com.kdt.mcgui.LauncherMenuButton
-				android:id="@+id/discord_button"
-				style="@style/LauncherMenuButton.Universal"
-				android:layout_width="0dp"
-				android:text="@string/mcl_button_discord"
-				android:drawableStart="@drawable/ic_discord"
-				app:layout_constraintTop_toTopOf="parent"
-				app:layout_constraintStart_toEndOf="@id/social_divider"
-				app:layout_constraintEnd_toEndOf="parent"/>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_menu_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
 
+    <!-- 1. Header Oficial: REDE ECLYPSE (Canto Superior Esquerdo) -->
+    <LinearLayout
+        android:id="@+id/header_branding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-			<com.kdt.mcgui.LauncherMenuButton
-				android:id="@+id/custom_control_button"
-				style="@style/LauncherMenuButton.Universal"
-				android:layout_width="match_parent"
-				android:drawableStart="@drawable/ic_menu_custom_controls"
-				android:text="@string/mcl_option_customcontrol"
-				app:layout_constraintTop_toBottomOf="@id/news_button" />
+        <TextView
+            android:id="@+id/title_rede_eclypse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REDE ECLYPSE"
+            android:textColor="@color/eclypse_text_title"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.06"
+            android:shadowColor="@color/eclypse_purple_primary"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="14" />
 
-			<com.kdt.mcgui.LauncherMenuButton
-				android:id="@+id/install_jar_button"
-				style="@style/LauncherMenuButton.Universal"
-				android:layout_width="match_parent"
-				android:drawableStart="@drawable/ic_menu_install_jar"
-				android:text="@string/main_install_jar_file"
-				app:layout_constraintTop_toBottomOf="@id/custom_control_button" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DRAGON MINE Z • FORGE 1.20.1"
+            android:textColor="@color/eclypse_purple_glow"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginTop="1dp" />
+    </LinearLayout>
 
-			<com.kdt.mcgui.LauncherMenuButton
-				android:id="@+id/share_logs_button"
-				style="@style/LauncherMenuButton.Universal"
-				android:layout_width="match_parent"
-				android:drawableStart="@android:drawable/ic_menu_share"
-				android:text="@string/main_share_logs"
-				app:layout_constraintTop_toBottomOf="@id/install_jar_button" />
+    <!-- 2. Card de Status do Servidor (Centro-Topo em Vidro Fume) -->
+    <LinearLayout
+        android:id="@+id/server_status_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_glass_card_pill"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="7dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-			<com.kdt.mcgui.LauncherMenuButton
-				android:id="@+id/open_files_button"
-				style="@style/LauncherMenuButton.Universal"
-				android:layout_width="match_parent"
-				android:drawableStart="@drawable/ic_folder"
-				android:text="@string/mcl_button_open_directory"
-				app:layout_constraintTop_toBottomOf="@id/share_logs_button" />
-		</androidx.constraintlayout.widget.ConstraintLayout>
-	</ScrollView>
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/indicator_online"
+            android:layout_marginEnd="8dp" />
 
-	<com.kdt.mcgui.mcVersionSpinner
-		android:id="@+id/mc_version_spinner"
-		android:layout_width="0dp"
-		android:layout_height="@dimen/_52sdp"
-		android:background="@android:color/transparent"
-		android:drawableEnd="@drawable/spinner_arrow"
+        <TextView
+            android:id="@+id/server_address_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sp-02.magnohost.com.br"
+            android:textColor="@color/eclypse_text_title"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
-		app:drawableEndSize="@dimen/padding_heavy"
-		app:drawableStartIntegerScaling="true"
-		app:drawableStartSize="@dimen/_36sdp"
-		app:drawableEndPadding="@dimen/_1sdp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" • "
+            android:textColor="@color/eclypse_text_muted"
+            android:textSize="12sp" />
 
-		app:layout_constraintBottom_toTopOf="@id/play_button"
-		app:layout_constraintEnd_toStartOf="@+id/edit_profile_button"
-		app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/server_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ONLINE"
+            android:textColor="@color/eclypse_online_green"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
-	<ImageButton
-		android:id="@+id/edit_profile_button"
-		android:layout_width="@dimen/_52sdp"
-		android:layout_height="@dimen/_52sdp"
-		android:background="?android:attr/selectableItemBackground"
+        <TextView
+            android:id="@+id/server_players_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" (150 Guerreiros)"
+            android:textColor="@color/eclypse_purple_glow"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-		android:src="@drawable/ic_edit_profile"
-		app:layout_constraintBottom_toBottomOf="@+id/mc_version_spinner"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/mc_version_spinner" />
+    <!-- 3. Card Flutuante de Perfil do Jogador (Lado Esquerdo) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/player_card"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_glass_card"
+        android:padding="14dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_branding">
 
+        <!-- Avatar / Skin Head -->
+        <ImageView
+            android:id="@+id/player_skin_avatar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_pojav_full"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-	<!-- This view is for cosmetic purpose only -->
-	<View
-		android:id="@+id/_background_display_view"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:background="@color/background_bottom_bar"
-		android:translationZ="-1dp"
+        <!-- Nome do Jogador -->
+        <TextView
+            android:id="@+id/player_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Guerreiro"
+            android:textColor="@color/eclypse_text_title"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/player_skin_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/player_skin_avatar" />
 
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintTop_toTopOf="@id/mc_version_spinner" />
+        <!-- Tag de Rank / RPG -->
+        <TextView
+            android:id="@+id/player_rank_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GUERREIRO Z"
+            android:textColor="@color/eclypse_purple_glow"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:background="@drawable/bg_badge_purple"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toEndOf="@id/player_skin_avatar"
+            app:layout_constraintTop_toBottomOf="@id/player_username" />
 
-	<com.kdt.mcgui.MineButton
-		android:id="@+id/play_button"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/_62sdp"
+        <!-- Botao Trocar Conta -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/switch_account_btn"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:text="Trocar Conta"
+            android:textColor="@color/eclypse_text_subtitle"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_glass_card_pill"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/player_skin_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-		android:layout_marginHorizontal="@dimen/_17sdp"
-		android:layout_marginBottom="@dimen/_15sdp"
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-		android:textAllCaps="true"
-		android:text="@string/main_play"
-		app:layout_constraintBottom_toBottomOf="parent"
-		/>
+    <!-- 4. Mini-Dock Flutuante de Atalhos (Canto Inferior Esquerdo) -->
+    <LinearLayout
+        android:id="@+id/bottom_dock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_glass_card_pill"
+        android:padding="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Discord Oficial -->
+        <ImageButton
+            android:id="@+id/discord_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_dock_item"
+            android:src="@drawable/ic_discord"
+            android:tint="@color/eclypse_purple_glow"
+            android:scaleType="centerInside"
+            android:contentDescription="Discord" />
+
+        <!-- Loja VIP -->
+        <ImageButton
+            android:id="@+id/shop_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_dock_item"
+            android:src="@drawable/ic_shop_vip"
+            android:tint="@color/eclypse_purple_glow"
+            android:scaleType="centerInside"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Loja VIP" />
+
+        <!-- Controles Touch na Tela -->
+        <ImageButton
+            android:id="@+id/custom_control_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_dock_item"
+            android:src="@drawable/ic_menu_custom_controls"
+            android:tint="@color/eclypse_purple_glow"
+            android:scaleType="centerInside"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Controles" />
+
+        <!-- Configuracoes do Launcher -->
+        <ImageButton
+            android:id="@+id/dock_settings_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_dock_item"
+            android:src="@drawable/ic_menu_settings"
+            android:tint="@color/eclypse_purple_glow"
+            android:scaleType="centerInside"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Configurações" />
+
+        <!-- Pasta de Arquivos / Mods -->
+        <ImageButton
+            android:id="@+id/open_files_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_dock_item"
+            android:src="@drawable/ic_folder"
+            android:tint="@color/eclypse_purple_glow"
+            android:scaleType="centerInside"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Arquivos" />
+    </LinearLayout>
+
+    <!-- 5. Botao Gigante "JOGAR" em Vidro Neon (Canto Inferior Direito) -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/play_button"
+        android:layout_width="190dp"
+        android:layout_height="52dp"
+        android:background="@drawable/bg_button_jogar"
+        android:text="▶  JOGAR"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08"
+        android:shadowColor="#000000"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="4"
+        android:elevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Elementos Ocultos mantidos para compatibilidade com MainMenuFragment -->
+    <com.kdt.mcgui.mcVersionSpinner
+        android:id="@+id/mc_version_spinner"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/edit_profile_button"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/news_button"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/install_jar_button"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/share_logs_button"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

@@ -3,13 +3,28 @@
     <color name="control_button_color">#4CC4C4C4</color>
     <color name="control_button_pressed_color">#4D000000</color>
 
-    <color name="minebutton_color">#57CC33</color>
-    <color name="background_app">#181818</color>
-    <color name="divider">@color/background_overlay</color>
-    <color name="background_overlay">#464646</color>
-    <color name="background_status_bar">#242424</color>
-    <color name="background_bottom_bar">#232323</color>
+    <color name="minebutton_color">#8B5CF6</color>
+    <color name="background_app">#07080B</color>
+    <color name="divider">#201B35</color>
+    <color name="background_overlay">#1F1635</color>
+    <color name="background_status_bar">#07080B</color>
+    <color name="background_bottom_bar">#0A0B12</color>
 
     <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#B2B2B2</color>
+    <color name="secondary_text">#C4B5FD</color>
+
+    <!-- Rede Eclypse — Shenlong & Glassmorphism Theme -->
+    <color name="eclypse_purple_primary">#8B5CF6</color>
+    <color name="eclypse_purple_glow">#A78BFA</color>
+    <color name="eclypse_purple_dark">#5B21B6</color>
+    <color name="eclypse_purple_deep">#3B1470</color>
+    <color name="eclypse_glass_bg">#D90A0B12</color>
+    <color name="eclypse_glass_card">#BF110D20</color>
+    <color name="eclypse_glass_pill">#D9140F28</color>
+    <color name="eclypse_glass_stroke">#4D8B5CF6</color>
+    <color name="eclypse_glass_stroke_bright">#99A78BFA</color>
+    <color name="eclypse_online_green">#10B981</color>
+    <color name="eclypse_text_title">#FFFFFF</color>
+    <color name="eclypse_text_subtitle">#DDD6FE</color>
+    <color name="eclypse_text_muted">#9CA3AF</color>
 </resources>
