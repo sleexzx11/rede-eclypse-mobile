@@ -82,7 +82,7 @@ jobs:
             ### 📱 Launcher Mobile Oficial da Rede Eclypse
             - **Minecraft 1.20.1** com **Forge 47.4.10**
             - **Java 17 e Java 21 integrados** (compatível com ARM64, ARM32 e x86_64 para emuladores)
-            - **Servidor:** `sp-02.magnohost.com.br:25518` (já embutido na lista de servidores)
+            - **Servidor:** `redeeclypse.srvmc.com` (já embutido na lista de servidores)
             - **Auto-Update:** Sincronização automática de mods via GitHub no botão Jogar.
           files: |
             out/Rede-Eclypse-Mobile.apk

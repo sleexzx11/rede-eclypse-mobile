@@ -19,8 +19,8 @@ import java.util.concurrent.Executors;
 
 public class EclypseServerPinger {
     private static final String TAG = "EclypseServerPinger";
-    public static final String SERVER_HOST = "sp-02.magnohost.com.br";
-    public static final int SERVER_PORT = 25518;
+    public static final String SERVER_HOST = "redeeclypse.srvmc.com";
+    public static final int SERVER_PORT = 25539;
 
     private static final ExecutorService sExecutor = Executors.newSingleThreadExecutor();
     private static final Handler sMainHandler = new Handler(Looper.getMainLooper());

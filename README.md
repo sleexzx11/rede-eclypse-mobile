@@ -9,7 +9,7 @@ Launcher mobile customizado da **Rede Eclypse** para Android, baseado no PojavLa
 - **Nome Oficial:** Rede Eclypse
 - **Identificador de Pacote:** `net.redeeclypse.launcher`
 - **Versão Padrão:** Minecraft 1.20.1 com Forge 47.4.10
-- **Servidor Integrado:** `sp-02.magnohost.com.br:25518` (Rede Eclypse)
+- **Servidor Integrado:** `redeeclypse.srvmc.com` (Rede Eclypse)
 - **Auto-Update no Botão Jogar:** Sincroniza mods automaticamente a partir do repositório da Rede Eclypse antes de iniciar o jogo.
 - **Compilação Automática (CI/CD):** Ao enviar commits para a branch `main`, o GitHub Actions compila o arquivo `Rede-Eclypse-Mobile.apk` e o disponibiliza na aba **Releases**.
 

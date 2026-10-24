@@ -65,7 +65,7 @@
             android:id="@+id/server_address_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="sp-02.magnohost.com.br"
+            android:text="redeeclypse.srvmc.com"
             android:textColor="@color/eclypse_text_title"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -246,7 +246,7 @@
         android:layout_width="190dp"
         android:layout_height="52dp"
         android:background="@drawable/bg_button_jogar"
-        android:text="▶  JOGARAs"
+        android:text="▶  JOGAR"
         android:textColor="#FFFFFF"
         android:textSize="17sp"
         android:textStyle="bold"
